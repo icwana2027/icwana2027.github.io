@@ -40,28 +40,34 @@
     <div id="sec-footer"></div>
 
     <script>
-        const sections = [
-            { id: 'sec-navbar', file: 'navbar.html' },
-            { id: 'sec-hero', file: 'hero.html' },
-            { id: 'sec-about', file: 'about.html' },
-            { id: 'sec-dates-program', file: 'dates-program.html' },
-            { id: 'sec-speakers', file: 'speakers.html' },
-            { id: 'sec-abstract-journals', file: 'abstract-journals.html' },
-            { id: 'sec-registration-committees', file: 'registration-committees.html' },
-            { id: 'sec-footer', file: 'footer.html' }
-        ];
+    const sections = [
+        { id: 'sec-navbar', file: 'navbar.html' },
+        { id: 'sec-hero', file: 'hero.html' },
+        { id: 'sec-about', file: 'about.html' },
+        { id: 'sec-dates-program', file: 'dates-program.html' },
+        { id: 'sec-speakers', file: 'speakers.html' },
+        { id: 'sec-abstract-journals', file: 'abstract-journals.html' },
+        { id: 'sec-registration-committees', file: 'registration-committees.html' },
+        { id: 'sec-footer', file: 'footer.html' }
+    ];
 
-        Promise.all(sections.map(sec =>
-            fetch(sec.file)
-                .then(res => res.ok ? res.text() : '')
-                .then(html => {
-                    document.getElementById(sec.id).innerHTML = html;
-                })
-        )).then(() => {
-            if (window.MathJax && MathJax.typesetPromise) {
-                MathJax.typesetPromise();
-            }
-        });
+    Promise.all(sections.map(sec =>
+        fetch(sec.file)
+            .then(res => res.ok ? res.text() : '')
+            .then(html => {
+                document.getElementById(sec.id).innerHTML = html;
+            })
+            .catch(err => console.error('โหลดไม่ได้:', sec.file, err))
+    )).then(() => {
+        // เลื่อนไปยัง #hash หลังโหลดครบ
+        if (location.hash) {
+            const target = document.querySelector(location.hash);
+            if (target) target.scrollIntoView();
+        }
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise();
+        }
+    });
     </script>
 </body>
 </html>
